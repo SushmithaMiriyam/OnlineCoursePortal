@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using OnlineCoursePortal.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace OnlineCoursePortal.Controllers
 {
@@ -17,7 +18,8 @@ namespace OnlineCoursePortal.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private OnlineCoursePortalContext db = new OnlineCoursePortalContext();
+        private ApplicationDbContext context = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -162,6 +164,7 @@ namespace OnlineCoursePortal.Controllers
                     PhoneNumber = model.PhoneNumber,
                     DateOfBirth = model.DateOfBirth
                 };
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -172,9 +175,9 @@ namespace OnlineCoursePortal.Controllers
                         }
                         Student student = new Student
                         {
+                            StudentID = user.Id,
                             FirstName = model.FirstName,
                             LastName = model.LastName,
-                            UserName = model.Email,
                             Email = model.Email,
                             Gender = model.Gender,
                             PhoneNumber = model.PhoneNumber,
@@ -192,9 +195,9 @@ namespace OnlineCoursePortal.Controllers
                     {
                         Instructor instructor = new Instructor
                         {
+                            InstructorID = user.Id,
                             FirstName = model.FirstName,
                             LastName = model.LastName,
-                            UserName = model.Email,
                             Email = model.Email,
                             Gender = model.Gender,
                             PhoneNumber = model.PhoneNumber,
@@ -204,7 +207,14 @@ namespace OnlineCoursePortal.Controllers
                         db.Instructors.Add(instructor);
                         db.SaveChanges();
                     }
-                    //UserManager.AddToRole(user.Id, model.Role);
+                    if (!roleManager.RoleExists(model.Role))
+                    {
+                        
+                        var role = new IdentityRole();
+                        role.Name = model.Role;
+                        roleManager.Create(role);
+                    }
+                    UserManager.AddToRole(user.Id, model.Role);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771

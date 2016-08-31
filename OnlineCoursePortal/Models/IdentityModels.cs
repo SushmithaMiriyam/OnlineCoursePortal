@@ -32,7 +32,7 @@ namespace OnlineCoursePortal.Models
         {
         }
 
-        public DbSet<Student> Students { get; set; }
+/*        public DbSet<Student> Students { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
@@ -43,7 +43,7 @@ namespace OnlineCoursePortal.Models
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-
+*/
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
