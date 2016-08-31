@@ -17,6 +17,7 @@ namespace OnlineCoursePortal.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -151,10 +152,59 @@ namespace OnlineCoursePortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Gender = model.Gender,
+                    PhoneNumber = model.PhoneNumber,
+                    DateOfBirth = model.DateOfBirth
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    if (model.Role.Equals("Student"))
+                    {
+                        if (model.InterestedCategory== null) {
+                            model.InterestedCategory = "";
+                        }
+                        Student student = new Student
+                        {
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            UserName = model.Email,
+                            Email = model.Email,
+                            Gender = model.Gender,
+                            PhoneNumber = model.PhoneNumber,
+                            DateOfBirth = model.DateOfBirth,
+                            InterestedCategory = model.InterestedCategory,
+                            NoOfCoursesEnrolled = 0
+
+                        };
+
+                        db.Students.Add(student);
+                        db.SaveChanges();
+                        
+                    }
+                    else
+                    {
+                        Instructor instructor = new Instructor
+                        {
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            UserName = model.Email,
+                            Email = model.Email,
+                            Gender = model.Gender,
+                            PhoneNumber = model.PhoneNumber,
+                            DateOfBirth = model.DateOfBirth,
+                            TotalCoursesUploaded = 0
+                        };
+                        db.Instructors.Add(instructor);
+                        db.SaveChanges();
+                    }
+                    //UserManager.AddToRole(user.Id, model.Role);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
