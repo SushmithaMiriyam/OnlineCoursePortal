@@ -12,8 +12,6 @@ namespace OnlineCoursePortal.Models
     [Table("Instructor")]
     public class Instructor 
     {
-
-        [Required]
         [Key]
         public string InstructorID { get; set; }
 

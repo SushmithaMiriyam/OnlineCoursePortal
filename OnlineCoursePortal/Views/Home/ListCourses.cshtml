@@ -1,0 +1,89 @@
+﻿@model IEnumerable<OnlineCoursePortal.Models.Course>
+
+@{
+    ViewBag.Title = "ListCourses";
+}
+
+<h2>List of all Courses offered here.</h2>
+
+@foreach (var item in Model)
+{
+    //extract thumbnail of video lectures or logo
+    //extract the following details for summary:
+    //Course Name, Instructor Name, Summary of course, Total number of Sections, Uploaded date
+
+
+
+    <div>
+        <div>
+            @Html.DisplayFor(modelItem => item.CoursePath)
+            @Html.DisplayFor(modelItem => item.CourseName)
+            
+        </div>
+    </div>
+}
+<div>
+
+</div>
+
+
+<!--
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Instructor.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Instructor.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CoursePath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CoursePath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UploadedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UploadedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Totalpoints)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Totalpoints)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CourseID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+    -->

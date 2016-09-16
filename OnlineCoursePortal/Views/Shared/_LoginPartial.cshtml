@@ -9,6 +9,16 @@
         <li>
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
+        @if (User.IsInRole("Instructor"))
+        {
+
+            <li>@Html.ActionLink("My Courses", "Index", "Courses")</li>
+            <li>@Html.ActionLink("Add Course", "Create","Courses")</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("Enrolled Courses","Details","Courses")</li>
+        }
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
     }

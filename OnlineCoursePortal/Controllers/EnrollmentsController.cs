@@ -39,7 +39,7 @@ namespace OnlineCoursePortal.Controllers
         // GET: Enrollments/Create
         public ActionResult Create()
         {
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
+            ViewBag.CourseID = new SelectList(db.Course, "CourseID", "CourseName");
             ViewBag.StudentID = new SelectList(db.Students, "StudentID", "FirstName");
             return View();
         }
@@ -58,7 +58,7 @@ namespace OnlineCoursePortal.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", enrollment.CourseID);
+            ViewBag.CourseID = new SelectList(db.Course, "CourseID", "CourseName", enrollment.CourseID);
             ViewBag.StudentID = new SelectList(db.Students, "StudentID", "FirstName", enrollment.StudentID);
             return View(enrollment);
         }
@@ -75,7 +75,7 @@ namespace OnlineCoursePortal.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", enrollment.CourseID);
+            ViewBag.CourseID = new SelectList(db.Course, "CourseID", "CourseName", enrollment.CourseID);
             ViewBag.StudentID = new SelectList(db.Students, "StudentID", "FirstName", enrollment.StudentID);
             return View(enrollment);
         }
@@ -93,7 +93,7 @@ namespace OnlineCoursePortal.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", enrollment.CourseID);
+            ViewBag.CourseID = new SelectList(db.Course, "CourseID", "CourseName", enrollment.CourseID);
             ViewBag.StudentID = new SelectList(db.Students, "StudentID", "FirstName", enrollment.StudentID);
             return View(enrollment);
         }

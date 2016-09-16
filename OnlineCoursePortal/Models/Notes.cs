@@ -10,13 +10,13 @@ namespace OnlineCoursePortal.Models
     [Table("Notes")]
     public class Notes
     {
-        [Required]
         [Key]
-        public string NotesID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int NotesID { get; set; }
 
         [Required]
         [ForeignKey("Enrollment")]
-        public string EnrollmentID { get; set; }
+        public int EnrollmentID { get; set; }
 
         [Required]
         public string AddedNotes { get; set; }

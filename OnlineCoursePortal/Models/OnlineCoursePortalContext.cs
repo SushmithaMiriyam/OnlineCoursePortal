@@ -16,7 +16,7 @@ namespace OnlineCoursePortal.Models
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
-        public DbSet<Course> Courses { get; set; }
+        public DbSet<Course> Course { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Notes> Notes { get; set; }
         public DbSet<Reminder> Reminders { get; set; }

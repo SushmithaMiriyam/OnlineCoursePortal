@@ -10,14 +10,13 @@ namespace OnlineCoursePortal.Models
     [Table("Reminder")]
     public class Reminder
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Required]
         [Key]
-        public string ReminderID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ReminderID { get; set; }
 
         [Required]
         [ForeignKey("Enrollment")]
-        public string EnrollmentID { get; set; }
+        public int EnrollmentID { get; set; }
 
         [Required]
         public DateTime ReminderDateTime { get; set; }

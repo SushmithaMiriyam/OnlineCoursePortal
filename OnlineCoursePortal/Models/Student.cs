@@ -12,15 +12,12 @@ namespace OnlineCoursePortal.Models
     [Table("Student")]
     public class Student 
     {
-        [Required]
         [Key]
         public string StudentID { get; set; }
-
         [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-
         [Required]
         public string Gender { get; set; }
 

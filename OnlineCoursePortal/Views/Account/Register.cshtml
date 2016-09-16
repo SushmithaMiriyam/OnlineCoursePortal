@@ -42,12 +42,12 @@
         </div>
     </div>
     <div class="form-group">
-        Male @Html.RadioButton("Gender", "Male")
-        Female @Html.RadioButton("Gender", "Female")
+        <label class = "col-md-2 control-label">Male </label> @Html.RadioButton("Gender", "Male")
+        <label class="control-label">   Female</label> @Html.RadioButton("Gender", "Female")
     </div>
     <div class="form-group">
-        Instructor @Html.RadioButton("Role", "Instructor")
-        Student @Html.RadioButton("Role", "Student")
+        <label class="col-md-2 control-label">Instructor</label>  @Html.RadioButton("Role", "Instructor")
+        <label class="control-label"> Student</label>  @Html.RadioButton("Role", "Student")
     </div>
 
     <div class="form-group">
