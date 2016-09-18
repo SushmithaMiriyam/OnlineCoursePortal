@@ -1,0 +1,34 @@
+﻿@model IEnumerable<OnlineCoursePortal.Models.Course>
+
+@{
+    ViewBag.Title = "My Courses";
+}
+
+<h2>Search Results for "@ViewBag.searchString"</h2>
+
+@foreach (var item in Model)
+{
+    <hr />
+    <div style="padding:20px">
+       
+    @if (User.IsInRole("Student"))
+    {
+        using (Html.BeginForm("EnrollToCourse", "Enrollments", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <h3 style="display:inline-block">@Html.DisplayFor(modelItem => item.CourseName) | </h3>
+            @Html.AntiForgeryToken()
+            @Html.Hidden("CourseID", item.CourseID)
+            <input type="submit" value="Enroll" class="btn" />
+        }
+    }
+    else
+    { <h3 style="display:inline-block">@Html.DisplayFor(modelItem => item.CourseName)</h3> <br/>}
+    Summary: @Html.DisplayFor(modelItem => item.CourseSummary)<br />
+        Category: @Html.DisplayFor(modelItem => item.Category) | Total Sections: @Html.DisplayFor(modelItem => item.TotalSections) |
+        Total Points: @Html.DisplayFor(modelItem => item.Totalpoints) | Uploaded Date: @Html.DisplayFor(modelItem => item.UploadedDate) <br />
+       
+     </div>
+    //    @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |
+    //   @Html.ActionLink("Delete", "Delete", new { id=item.CourseID })
+}
+

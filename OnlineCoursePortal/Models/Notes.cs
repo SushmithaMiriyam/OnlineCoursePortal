@@ -13,15 +13,16 @@ namespace OnlineCoursePortal.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int NotesID { get; set; }
-
-        [Required]
+        
         [ForeignKey("Enrollment")]
         public int EnrollmentID { get; set; }
 
         [Required]
         public string AddedNotes { get; set; }
         public string LecturePath { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime NotesAddedDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime LastEditDate { get; set; }
 
         public virtual Enrollment Enrollment { get; set; }

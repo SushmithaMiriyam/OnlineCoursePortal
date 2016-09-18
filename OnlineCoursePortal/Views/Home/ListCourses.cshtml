@@ -1,89 +1,32 @@
 ﻿@model IEnumerable<OnlineCoursePortal.Models.Course>
 
 @{
-    ViewBag.Title = "ListCourses";
+    ViewBag.Title = "ListOfCourses";
 }
 
-<h2>List of all Courses offered here.</h2>
-
+<h2>List of all Courses offered</h2>
 @foreach (var item in Model)
 {
-    //extract thumbnail of video lectures or logo
-    //extract the following details for summary:
-    //Course Name, Instructor Name, Summary of course, Total number of Sections, Uploaded date
-
-
-
-    <div>
-        <div>
-            @Html.DisplayFor(modelItem => item.CoursePath)
-            @Html.DisplayFor(modelItem => item.CourseName)
-            
-        </div>
-    </div>
-}
-<div>
-
-</div>
-
-
-<!--
-<div>
-    <h4>Course</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Instructor.FirstName)
-        </dt>
+    <div style="padding:20px">
+        
+        @if (User.IsInRole("Student"))
+        {
+            using (Html.BeginForm("EnrollToCourse", "Enrollments", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                <h3 style="display:inline-block">@Html.DisplayFor(modelItem => item.CourseName) | </h3>
+            @Html.AntiForgeryToken()
+            @Html.Hidden("CourseID", item.CourseID)
+            <input type="submit" value="Enroll" class="btn" />
+            }
+        }
+        else
+        {  <h3 style="display:inline-block">@Html.DisplayFor(modelItem => item.CourseName)</h3><br/>}
+        Summary: @Html.DisplayFor(modelItem => item.CourseSummary)<br />
+        Category: @Html.DisplayFor(modelItem => item.Category) | Total Sections: @Html.DisplayFor(modelItem => item.TotalSections) |
+        Total Points: @Html.DisplayFor(modelItem => item.Totalpoints) | Uploaded Date: @Html.DisplayFor(modelItem => item.UploadedDate) <br />
 
-        <dd>
-            @Html.DisplayFor(model => model.Instructor.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CoursePath)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CoursePath)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UploadedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UploadedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Totalpoints)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Totalpoints)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CourseID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-    -->
+    </div>
+    //    @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |
+    //   @Html.ActionLink("Delete", "Delete", new { id=item.CourseID })
+}

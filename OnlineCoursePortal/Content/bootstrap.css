@@ -56,14 +56,22 @@ html {
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
-
 body {
   background-image: url(Images/indexpage_backgroud.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
+  background-attachment: fixed;
 }
 
+.coursedetailsBody{
+    background-image: none;
+  background-color: wheat;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0;
+  background-attachment: fixed;
+}
 a:focus {
   outline: thin dotted;
 }
@@ -6294,6 +6302,85 @@ body.modal-open,
 .affix {
   position: fixed;
 }
+.courseName{
+    font-size:large;
+}
+
+.secName{
+    font-weight:bold;
+}
+
+
+.sideBarDiv{
+	background:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+	float:left;
+	height:100%;
+}
+
+.sideNav {
+	float:left;
+	/*padding:15px;*/
+	height:100%;
+    width:100%;
+    margin-left: 20%;
+}
+.sideNav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.sideNav ul li a {
+    padding-left:15%;
+    padding-bottom:14px;
+    padding-top:14px;
+    display: block;
+    color: white;
+	background-color: #222222;
+    text-align: left;
+    //padding: 10px 14px;
+    text-decoration: none;
+}
+
+.sideNav ul li a:hover {
+    background-color: #1C2E4C;
+}
+
+
+
+.sideNav-right {
+	float:right;
+	/*padding:15px;*/
+	height:100%;
+    width:100%;
+    margin-right: 20%;
+}
+.sideNav-right ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.sideNav-right ul li a {
+    display: block;
+    color:white;
+	background-color: #222222;
+    text-align: center;
+    padding: 10px 14px;
+    text-decoration: none;
+}
+
+.sideNav-right ul li a:hover {
+    background-color: #1C2E4C;
+}
+
+
+
 
 @-ms-viewport {
   width: device-width;

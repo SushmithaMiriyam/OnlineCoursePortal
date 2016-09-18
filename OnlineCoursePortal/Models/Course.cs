@@ -25,6 +25,7 @@ namespace OnlineCoursePortal.Models
         [Required]
         public string Category { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime UploadedDate { get; set; }
 
         [Required]

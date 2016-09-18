@@ -1,57 +1,31 @@
 ﻿@model IEnumerable<OnlineCoursePortal.Models.Course>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "My Courses";
 }
 
-<h2>Index</h2>
+<h2>My Courses</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CoursePath)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UploadedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Totalpoints)
-        </th>
-        <th></th>
-    </tr>
+
+
+
+
+
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CoursePath)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UploadedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Totalpoints)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CourseID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CourseID })
-        </td>
-    </tr>
+    <hr />
+    <div style="padding:20px">
+        <h3>@Html.DisplayFor(modelItem => item.CourseName)</h3>
+        Summary: @Html.DisplayFor(modelItem => item.CourseSummary)<br />
+        Category: @Html.DisplayFor(modelItem => item.Category) | Total Sections: @Html.DisplayFor(modelItem => item.TotalSections) |
+        Total Points: @Html.DisplayFor(modelItem => item.Totalpoints) | Uploaded Date: @Html.DisplayFor(modelItem => item.UploadedDate) <br/>
+    </div>
+          
+       //     @Html.ActionLink("Edit", "Edit", new { id=item.CourseID }) |
+        //    @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |
+         //   @Html.ActionLink("Delete", "Delete", new { id=item.CourseID })
 }
 
-</table>
