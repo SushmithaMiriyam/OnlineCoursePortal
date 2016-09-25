@@ -35,6 +35,7 @@ namespace OnlineCoursePortal.Controllers
         {
             var course = (from c in db.Course
                           where c.TotalSections > 0
+                          orderby c.UploadedDate descending
                           select c).ToList();
             return View(course);
         }
@@ -50,7 +51,7 @@ namespace OnlineCoursePortal.Controllers
             ViewBag.searchString = searchString;
             var course = (from c in db.Course
                           where c.CourseName.Contains(searchString) || c.CourseSummary.Contains(searchString)
-                          orderby c.UploadedDate
+                          orderby c.UploadedDate descending
                           select c).ToList();
             return View(course);
         }

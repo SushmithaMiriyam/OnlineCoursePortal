@@ -18,11 +18,11 @@
 @foreach (var item in Model) {
     <hr />
     <div style="padding:20px">
-        <h3>@Html.DisplayFor(modelItem => item.CourseName)</h3>
-        Summary: @Html.DisplayFor(modelItem => item.CourseSummary)<br />
-        Category: @Html.DisplayFor(modelItem => item.Category) | Total Sections: @Html.DisplayFor(modelItem => item.TotalSections) |
-        Total Points: @Html.DisplayFor(modelItem => item.Totalpoints) | Uploaded Date: @Html.DisplayFor(modelItem => item.UploadedDate) <br/>
-    </div>
+        <a href="/Courses/Details?Cid=@item.CourseID&sectionNum=1&LectureNum=1"><h3>@Html.DisplayFor(modelItem => item.CourseName)</h3></a>
+            Summary: @Html.DisplayFor(modelItem => item.CourseSummary)<br />
+            Category: @Html.DisplayFor(modelItem => item.Category) | Total Sections: @Html.DisplayFor(modelItem => item.TotalSections) |
+            Total Points: @Html.DisplayFor(modelItem => item.Totalpoints) | Uploaded Date: @Html.DisplayFor(modelItem => item.UploadedDate) <br />
+</div>
           
        //     @Html.ActionLink("Edit", "Edit", new { id=item.CourseID }) |
         //    @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |

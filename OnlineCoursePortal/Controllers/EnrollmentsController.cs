@@ -25,6 +25,7 @@ namespace OnlineCoursePortal.Controllers
             var course = (from c in db.Course
                          join e in db.Enrollments on c.CourseID equals e.CourseID
                          where e.StudentID == userId
+                         orderby e.EnrollmentDate descending
                          select c).ToList();
 
 
@@ -102,13 +103,13 @@ namespace OnlineCoursePortal.Controllers
             try { 
             foreach (FileInfo l in dirInfo.GetFiles("AddDoc" + LectureNum + ".*"))
             {
-                    ViewBag.AddDoc = true;
+                    ViewBag.AddDoc = "true";
                     AddDoc = LecPath + "/" + l.Name;
             }
             }
             catch(DirectoryNotFoundException e)
             {
-                ViewBag.AddDoc = false;
+                ViewBag.AddDoc = "false";
             }
 
 

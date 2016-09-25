@@ -48,7 +48,7 @@ else if (ViewBag.message == "You have already Enrolled")
         <source src="@Url.Content(Model.LectureVideoPath)" type='video/mp4' />
     </video>
 </div>
-@if (ViewBag.AddDoc) { 
+@if (ViewBag.AddDoc=="true") { 
 <div class="container">
     @Html.ActionLink("Download Additional Documents", "downloadAddDoc", new { Filepath=Model.AddDocPath})
 </div>

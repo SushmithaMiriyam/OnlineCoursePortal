@@ -11,6 +11,7 @@ using System.IO;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace OnlineCoursePortal.Controllers
 {
@@ -27,25 +28,81 @@ namespace OnlineCoursePortal.Controllers
             //              select c;
             var course = (from c in db.Course.Include(c => c.Instructor)
                          where c.InstructorID == userId
-                         orderby c.UploadedDate 
+                         orderby c.UploadedDate descending
                          select c).ToList();
 
             return View(course);
         }
 
         // GET: Courses/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(int Cid, int sectionNum, int LectureNum)
         {
-            if (id == null)
+            var userId = User.Identity.GetUserId();
+            Course course = db.Course.Find(Cid);
+            Instructor instructor = db.Instructors.Find(course.InstructorID);
+            string userName = instructor.Email;
+            //get number of lectures in each section and section names
+            ArrayList LecCount = new ArrayList();
+            ArrayList sectionNames = new ArrayList();
+            for (int i = 1; i <= course.TotalSections; i++)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                string sPath = course.CoursePath + "/section" + i;
+                DirectoryInfo dInfo = new DirectoryInfo(Server.MapPath(sPath));
+                var str = dInfo.GetDirectories();
+                int totLectures = str.Count();
+                //get count of lectures in each section
+                LecCount.Add(totLectures);
+                var secName = System.IO.File.ReadAllText(Server.MapPath(sPath) + @"/SectionName.txt");
+                sectionNames.Add((string)secName);
             }
-            Course course = db.Course.Find(id);
-            if (course == null)
+            string path = course.CoursePath;
+            string secPath = path + "/section" + sectionNum;
+            //get section Name from "secPath"+/SectionName.txt
+
+            string LecPath = secPath + "/Lecture" + LectureNum;
+            
+            //get list of filenames in the LecturePath
+            //check for video file withname "Lecture"+LectureNum
+            string LecVideo = "";
+            DirectoryInfo dirInfo = new DirectoryInfo(Server.MapPath(LecPath));
+            foreach (FileInfo l in dirInfo.GetFiles("Lecture" + LectureNum + ".*"))
             {
-                return HttpNotFound();
+
+                LecVideo = LecPath + "/" + l.Name;
             }
-            return View(course);
+            //check for additional document with name "AddDoc"+LectureNum
+            //temp
+            string AddDoc = "";
+            try
+            {
+                foreach (FileInfo l in dirInfo.GetFiles("AddDoc" + LectureNum + ".*"))
+                {
+                    ViewBag.AddDoc = "true";
+                    AddDoc = LecPath + "/" + l.Name;
+                }
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                ViewBag.AddDoc = "false";
+            }
+
+
+            //get lecture description from file "LectureDesc"+ LectureNum+".txt"
+
+            var lecDesc = System.IO.File.ReadAllText(Server.MapPath(LecPath) + @"/LectureDesc" + LectureNum + ".txt");
+            AddedCourseView courseView = new AddedCourseView
+            {
+                course = course,
+                LectureVideoPath = LecVideo,
+                AddDocPath = AddDoc,
+                LectureDesc = (string)lecDesc,
+                LecturesInSection = LecCount,
+                sectionNames = sectionNames,
+                sectionNum = sectionNum,
+                lecNum = LectureNum
+            };
+
+            return View(courseView);
         }
 
         // GET: Courses/Create
