@@ -178,7 +178,7 @@ namespace OnlineCoursePortal.Controllers
         [HttpPost]
         [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
-        public ActionResult AddSections(SectionViewModel section)
+        public ActionResult AddSections(SectionViewModel section, string submitBtn)
         {
             Course course = TempData["course"] as Course;
             int totsec = section.totalSections;
@@ -309,7 +309,85 @@ namespace OnlineCoursePortal.Controllers
                 }
                 i++;
             }
+            if (submitBtn.CompareTo("Add Next Section") == 0)
+            {
+                if (section.sectionsTobeAdded == 0)
+                {
+                    return RedirectToAction("CourseUploadSucess");
+                }
+                return RedirectToAction("CreateSections");
+            }
+            else if (submitBtn.CompareTo("Add Quiz") == 0)
+            {
+                return RedirectToAction("CreateQuiz");
+            }
+            else if (submitBtn.CompareTo("") == 0)
+            {
+                return RedirectToAction("CourseUploadSucess");
+            }
             if (section.sectionsTobeAdded == 0)
+            {
+                return RedirectToAction("CourseUploadSucess");
+            }
+            return RedirectToAction("CreateSections");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Instructor")]
+        public ActionResult CreateQuiz()
+        {
+            ViewBag.sectionsTobeAdded = TempData["sectionsTobeAdded"];
+            ViewBag.totSec = TempData["totSec"];
+            TempData["totSec"] = ViewBag.totSec;
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Instructor")]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddQuiz(FormCollection form, string NumOfQuestions, string sectionsTobeAdded, string totalSections)
+        {
+            Course course = TempData["course"] as Course;
+            TempData["totSec"] = Convert.ToInt32(totalSections);
+            TempData["sectionsTobeAdded"] = Convert.ToInt32(sectionsTobeAdded);
+
+            for (int i = 1; i <= Convert.ToInt32(NumOfQuestions); i++)
+            {
+                string quesID = "question" + i;
+                string option1ID = "option1" + i;
+                string option2ID = "option2" + i;
+                string option3ID = "option3" + i;
+                string option4ID = "option4" + i;
+                string answerID = "answer" + i;
+                Quiz quiz = new Quiz
+                {
+                    CourseID = course.CourseID,
+                    sectionNum = Convert.ToInt32(totalSections) - Convert.ToInt32(sectionsTobeAdded),
+                    question = form[quesID],
+                    option1 = form[option1ID],
+                    option2 = form[option2ID],
+                    option3 = form[option3ID],
+                    option4 = form[option4ID],
+                    answer = Convert.ToInt32(form[answerID])
+
+                };
+                db.Quiz.Add(quiz);
+                db.SaveChanges();
+
+            }
+            if (form["submitBtn"].CompareTo("Add Next Section") == 0)
+            {
+                if (sectionsTobeAdded.CompareTo("0") == 0)
+                {
+                    return RedirectToAction("CourseUploadSucess");
+                }
+                return RedirectToAction("CreateSections");
+            }
+            else if (form["submitBtn"].CompareTo("") == 0)
+            {
+                return RedirectToAction("CourseUploadSucess");
+            }
+            if (sectionsTobeAdded.CompareTo("0") == 0)
             {
                 return RedirectToAction("CourseUploadSucess");
             }

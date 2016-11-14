@@ -1,0 +1,85 @@
+﻿@model OnlineCoursePortal.Models.Quiz
+
+@{
+    ViewBag.Title = "Add Quiz";
+    ViewBag.sectionNum = ViewBag.totSec - ViewBag.sectionsTobeAdded;
+}
+<h2>Add Quiz</h2>
+
+
+@using (Html.BeginForm("AddQuiz", "Courses", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <input type="hidden" name="sectionsTobeAdded" value="@ViewBag.sectionsTobeAdded" />
+        <input type="hidden" name="totalSections" value="@ViewBag.totSec" />
+        <label>Number of Questions</label>
+        <select type="number" id="NumOfQuestions" name="NumOfQuestions" min="1" max="15">
+            @for (int i = 1; i <= 15; i++)
+            {
+                <option value="@i">@i</option>
+
+            }
+        </select>
+        <br />
+        <div id="content">
+
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" name="submitBtn" value="Add Next Section" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" name="submitBtn" value="Complete" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+     $(document).ready(function () {
+         $("#NumOfQuestions").change(function () {
+         var totQuestions = $("#NumOfQuestions :selected").val();
+         var str = "";
+         for (var i = 1; i <= totQuestions; i++) {
+             var quesID = "question" + i;
+             str = str + "<hr> <div class='form-group'> \
+                  <label class='col-md-2 control-label'>Question</label>  \
+                    <div class='col-md-10'><input class='form-control' style='max-width:inherit;width:70%' type = 'text' id='" +
+                                            quesID + "' name='" + quesID + "'/></div>" +
+                " <label class='col-md-2 control-label'>Option 1 :</label>  \
+                    <div class='col-md-10'><input class='form-control' type= 'text' \
+                                        id='option1" + i + "' name='option1" + i + "'/></div>" +
+                " <label class='col-md-2 control-label'>Option 2 :</label>  \
+                    <div class='col-md-10'><input class='form-control' type= 'text' \
+                                        id='option2" + i + "' name='option2" + i + "'/></div>" +
+                " <label class='col-md-2 control-label'>Option 3 :</label>  \
+                    <div class='col-md-10'><input class='form-control' type= 'text' \
+                                        id='option3" + i + "' name='option3" + i + "'/></div>" +
+                " <label class='col-md-2 control-label'>Option 4 :</label>  \
+                    <div class='col-md-10'><input class='form-control' type= 'text' \
+                                        id='option4" + i + "' name='option4" + i + "'/></div>" +
+                " <label class='col-md-2 control-label'>Answer :</label>   \
+                    <div class='col-md-10'><select id='answer" + i + "' name='answer" + i + "'> \
+                    <option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option>  \
+                    </select></div> \
+                </div>";
+         }
+         $("#content").html(str);
+         });
+     });
+    </script>
+
+}

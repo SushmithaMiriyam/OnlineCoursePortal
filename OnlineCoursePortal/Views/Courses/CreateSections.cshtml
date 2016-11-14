@@ -4,7 +4,86 @@
     ViewBag.sectionsTobeAdded = ViewBag.sectionsTobeAdded - 1;
     ViewBag.sectionNum = ViewBag.totSec - ViewBag.sectionsTobeAdded;
 }
-<script>
+<h2>Please attach files below to add to Section @ViewBag.sectionNum :</h2>
+
+@using (Html.BeginForm("AddSections", "Courses", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.sectionName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.sectionName, new { @class = "form-control", required = "required" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">1. Lecture Description</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.lectureDescription1, new { @class = "form-control", required = "required" })
+        </div>
+        <label class="col-md-2 control-label"> Lecture Video file: </label><input required class="col-md-10" type="file" name="lecturefile1" accept="video/mp4" onchange="return CheckFileName('lecturefile1')" />
+        <label class="col-md-2 control-label">Additional Documents </label><input required type="file" name="additionalDoc1" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc1')" />
+    </div>
+    <input type="hidden" name="sectionsTobeAdded" value="@ViewBag.sectionsTobeAdded" />
+    <input type="hidden" name="totalSections" value="@ViewBag.totSec" />
+    <br />
+    <div class="form-group">
+        <label class="col-md-2 control-label">2. Lecture Description</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.lectureDescription2, new { @class = "form-control" })
+        </div>
+        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile2" accept="video/mp4" onchange="return CheckFileName('lecturefile2')" />
+        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc2" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc2')" />
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="col-md-2 control-label">3. Lecture Description</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.lectureDescription3, new { @class = "form-control" })
+        </div>
+        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile3" accept="video/mp4" onchange="return CheckFileName('lecturefile3')" />
+        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc3" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc3')" />
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="col-md-2 control-label">4. Lecture Description</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.lectureDescription4, new { @class = "form-control" })
+        </div>
+        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile4" accept="video/mp4" onchange="return CheckFileName('lecturefile4')" />
+        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc4" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc4')" />
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="col-md-2 control-label">5. Lecture Description</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.lectureDescription5, new { @class = "form-control" })
+        </div>
+        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile5" accept="video/mp4" onchange="return CheckFileName('lecturefile5')" />
+        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc5" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc5')" />
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" name="submitBtn" value="Add Next Section" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" name="submitBtn" value="Add Quiz" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" name="submitBtn" value="Complete" />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
 function CheckFileName(file) {
     var fileName = document.getElementByName(file).value;
 
@@ -49,72 +128,5 @@ function CheckDocExt(file) {
     }
     return true;
 }
-</script>
-<h2>Please attach files below to add to Section @ViewBag.sectionNum :</h2>
-
-@using (Html.BeginForm("AddSections", "Courses", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form"}))
-{
-    @Html.AntiForgeryToken()
-
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.sectionName, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.sectionName, new { @class = "form-control", required = "required" })
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">1. Lecture Description</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.lectureDescription1, new { @class = "form-control", required = "required" })
-        </div>
-        <label class="col-md-2 control-label"> Lecture Video file: </label><input required class="col-md-10" type="file" name="lecturefile1" accept="video/mp4" onchange="return CheckFileName('lecturefile1')" />
-        <label class="col-md-2 control-label">Additional Documents </label><input required type="file" name="additionalDoc1" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc1')" />
-    </div>
-    <input type="hidden" name="sectionsTobeAdded" value="@ViewBag.sectionsTobeAdded" />
-    <input type="hidden" name="totalSections" value="@ViewBag.totSec"/>
-    <br/>
-    <div class="form-group">
-        <label class="col-md-2 control-label">2. Lecture Description</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.lectureDescription2, new { @class = "form-control" })
-        </div>
-        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile2" accept="video/mp4" onchange="return CheckFileName('lecturefile2')" />
-        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc2" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc2')" />
-    </div>
-    <br/>
-    <div class="form-group">
-        <label class="col-md-2 control-label">3. Lecture Description</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.lectureDescription3, new { @class = "form-control" })
-        </div>
-        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile3" accept="video/mp4" onchange="return CheckFileName('lecturefile3')" />
-        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc3" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc3')" />
-    </div>
-    <br/>
-    <div class="form-group">
-        <label class="col-md-2 control-label">4. Lecture Description</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.lectureDescription4, new { @class = "form-control" })
-        </div>
-        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile4" accept="video/mp4" onchange="return CheckFileName('lecturefile4')" />
-        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc4" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc4')" />
-    </div>
-    <br/>
-    <div class="form-group">
-        <label class="col-md-2 control-label">5. Lecture Description</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.lectureDescription5, new { @class = "form-control" })
-        </div>
-        <label class="col-md-2 control-label"> Lecture Video file: </label><input class="col-md-10" type="file" name="lecturefile5" accept="video/mp4" onchange="return CheckFileName('lecturefile5')" />
-        <label class="col-md-2 control-label"> Additional Documents </label><input type="file" name="additionalDoc5" accept=".doc,.docx,.pdf,.txt" onchage="return CheckDocExt('additionalDoc5')" />
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Next" />
-        </div>
-    </div>
-}
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    </script>
 }

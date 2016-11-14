@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@using OnlineCoursePortal.Models
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -7,7 +8,14 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @{
+                var manager = new UserManager<ApplicationUser>(new Microsoft.AspNet.Identity.EntityFramework.UserStore<ApplicationUser>(new ApplicationDbContext()));
+                var currentUser = manager.FindById(User.Identity.GetUserId());
+            }
+            @if (currentUser != null)
+            {
+                @Html.ActionLink("Hello " + currentUser.FirstName + ", " + currentUser.LastName, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })}
+
         </li>
         @if (User.IsInRole("Instructor"))
         {

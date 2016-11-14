@@ -1,1 +1,0 @@
-Quick Introduction to Apache Spark

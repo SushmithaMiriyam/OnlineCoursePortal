@@ -16,10 +16,12 @@ namespace OnlineCoursePortal.Models
 
         [Required]
         public string CourseName { get; set; }
-        
+
         [ForeignKey("Instructor")]
         public string InstructorID { get; set; }
-        
+
+        public string InstructorName { get; set; }
+
         public string CoursePath { get; set; }
 
         [Required]
@@ -35,10 +37,14 @@ namespace OnlineCoursePortal.Models
         public string CourseSummary { get; set; }
 
         [Required]
-        [Range(0,5)]
+        [Range(0, 5)]
         public int TotalSections { get; set; }
 
+        public string TotalLectures { get; set; }
+
         public virtual Instructor Instructor { get; set; }
+
+        public virtual ICollection<Quiz> Quiz { get; set; }
 
         public virtual ICollection<Enrollment> Enrollments { get; set; }
     }

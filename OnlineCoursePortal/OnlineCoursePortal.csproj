@@ -216,6 +216,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notes.cs" />
     <Compile Include="Models\OnlineCoursePortalContext.cs" />
+    <Compile Include="Models\Quiz.cs" />
     <Compile Include="Models\Reminder.cs" />
     <Compile Include="Models\SectionViewModel.cs" />
     <Compile Include="Models\Student.cs" />
@@ -301,6 +302,7 @@
     <Content Include="Views\Courses\CourseUploadSucess.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Shared\_CourseLayout.cshtml" />
+    <Content Include="Views\Courses\CreateQuiz.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

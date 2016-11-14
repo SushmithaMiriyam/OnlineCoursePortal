@@ -20,6 +20,7 @@ namespace OnlineCoursePortal.Models
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Notes> Notes { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
+        public DbSet<Quiz> Quiz { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
