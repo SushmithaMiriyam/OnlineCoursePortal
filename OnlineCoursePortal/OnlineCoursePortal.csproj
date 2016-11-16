@@ -206,9 +206,11 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AddedCourseView.cs" />
+    <Compile Include="Models\AddedQuizView.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DbInitializer.cs" />
     <Compile Include="Models\EnrolledCourseView.cs" />
+    <Compile Include="Models\EnrolledQuizView.cs" />
     <Compile Include="Models\Enrollment.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -303,6 +305,8 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Shared\_CourseLayout.cshtml" />
     <Content Include="Views\Courses\CreateQuiz.cshtml" />
+    <Content Include="Views\Courses\QuizDetails.cshtml" />
+    <Content Include="Views\Enrollments\QuizDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

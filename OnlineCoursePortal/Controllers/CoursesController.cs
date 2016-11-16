@@ -87,12 +87,17 @@ namespace OnlineCoursePortal.Controllers
             }
 
 
+            ArrayList quizSecs = new ArrayList((from q in db.Quiz
+                                                where q.CourseID == Cid
+                                                orderby q.sectionNum
+                                                select q.sectionNum).Distinct().ToList());
             //get lecture description from file "LectureDesc"+ LectureNum+".txt"
 
             var lecDesc = System.IO.File.ReadAllText(Server.MapPath(LecPath) + @"/LectureDesc" + LectureNum + ".txt");
             AddedCourseView courseView = new AddedCourseView
             {
                 course = course,
+                QuizSecNums = quizSecs,
                 LectureVideoPath = LecVideo,
                 AddDocPath = AddDoc,
                 LectureDesc = (string)lecDesc,
@@ -105,6 +110,43 @@ namespace OnlineCoursePortal.Controllers
             return View(courseView);
         }
 
+        // GET: Courses/Details/5
+        public ActionResult QuizDetails(int Cid, int sectionNum)
+        {
+            List<Quiz> quiz = new List<Quiz>((from q in db.Quiz
+                                              where q.CourseID == Cid && q.sectionNum == sectionNum
+                                              select q).ToList());
+            Course course = db.Course.Find(Cid);
+
+            ArrayList LecCount = new ArrayList();
+            ArrayList sectionNames = new ArrayList();
+            for (int i = 1; i <= course.TotalSections; i++)
+            {
+                string sPath = course.CoursePath + "/section" + i;
+                DirectoryInfo dInfo = new DirectoryInfo(Server.MapPath(sPath));
+                var str = dInfo.GetDirectories();
+                int totLectures = str.Count();
+                //get count of lectures in each section
+                LecCount.Add(totLectures);
+                var secName = System.IO.File.ReadAllText(Server.MapPath(sPath) + @"/SectionName.txt");
+                sectionNames.Add((string)secName);
+            }
+            ArrayList quizSecs = new ArrayList((from q in db.Quiz
+                                                where q.CourseID == Cid
+                                                orderby q.sectionNum
+                                                select q.sectionNum).Distinct().ToList());
+
+            AddedQuizView quizView = new AddedQuizView
+            {
+                course = course,
+                QuizSecNums = quizSecs,
+                quiz = quiz,
+                LecturesInSection = LecCount,
+                sectionNames = sectionNames
+            };
+            return View(quizView);
+        }
+        
         // GET: Courses/Create
         [Authorize(Roles = "Instructor")]
         public ActionResult Create()

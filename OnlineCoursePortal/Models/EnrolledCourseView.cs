@@ -10,6 +10,7 @@ namespace OnlineCoursePortal.Models
     {
         public Course course { get; set; }
         public Enrollment enrollment { get; set; }
+        public ArrayList QuizSecNums { get; set; }
         public List<Notes> notes { get; set; }
         public List<Reminder> reminders { get; set; }
         public ArrayList LecturesInSection { get; set; }

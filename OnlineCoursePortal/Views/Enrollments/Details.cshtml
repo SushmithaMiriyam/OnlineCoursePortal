@@ -20,12 +20,22 @@ else if (ViewBag.message == "You have already Enrolled")
                 @Html.DisplayFor(model => model.course.CourseName)<br />
             </a>
         </li>
+        @{ int k = 0, secNum = (int)Model.QuizSecNums[0];}
         @for (int i = 0; i < Model.course.TotalSections; i++)
         {
             <li class="secName"><a href="/Enrollments/Details?Cid=@Model.course.CourseID&sectionNum=@(i+1)&LectureNum=1"> @Model.sectionNames[i]</a></li>
             for (int j = 1; j <= (int)Model.LecturesInSection[i]; j++)
             {
                 <li class="LecName"><a href="/Enrollments/Details?Cid=@Model.course.CourseID&sectionNum=@(i+1)&LectureNum=@j">>> Lecture @j</a></li>
+            }
+            if (i == secNum - 1)
+            {
+                <li class="QuizName"><a href="/Enrollments/QuizDetails?Cid=@Model.course.CourseID&sectionNum=@(i+1)">>> Quiz</a></li>
+                k++;
+                if (k < Model.QuizSecNums.Count)
+                {
+                    secNum = (int)Model.QuizSecNums[k];
+                }
             }
         }
 

@@ -1,0 +1,78 @@
+﻿@model OnlineCoursePortal.Models.EnrolledQuizView
+
+@{
+    ViewBag.Title = "QuizDetails";
+    Layout = "~/Views/Shared/_CourseLayout.cshtml";
+}
+@section side{
+    <ul>
+        <li class="courseName">
+            <a href="#">
+                @Html.DisplayFor(model => model.course.CourseName)<br />
+            </a>
+        </li>
+        @{ int k = 0, secNum = (int)Model.QuizSecNums[0];}
+        @for (int i = 0; i < Model.course.TotalSections; i++)
+        {
+            <li class="secName"><a href="/Enrollments/Details?Cid=@Model.course.CourseID&sectionNum=@(i+1)&LectureNum=1"> @Model.sectionNames[i]</a></li>
+            for (int j = 1; j <= (int)Model.LecturesInSection[i]; j++)
+            {
+                <li class="LecName"><a href="/Enrollments/Details?Cid=@Model.course.CourseID&sectionNum=@(i+1)&LectureNum=@j">>> Lecture @j</a></li>
+            }
+            if (i == secNum - 1)
+            {
+                <li class="QuizName"><a href="/Courses/QuizDetails?Cid=@Model.course.CourseID&sectionNum=@(i+1)">>> Quiz</a></li>
+                k++;
+                if (k < Model.QuizSecNums.Count)
+                {
+                    secNum = (int)Model.QuizSecNums[k];
+                }
+            }
+        }
+
+    </ul>
+}
+<br />
+<h2> Quiz</h2>
+
+@for (int i = 0; i < Model.quiz.Count; i++)
+{
+    <hr />
+    <div>
+        Question: @Model.quiz[i].question <br />
+        <input type="radio" class="ques@(i+1)" name="ques@(i+1)" value=1 /> @Model.quiz[i].option1 <br />
+        <input type="radio" class="ques@(i+1)" name="ques@(i+1)" value=2 /> @Model.quiz[i].option2 <br />
+        <input type="radio" class="ques@(i+1)" name="ques@(i+1)" value=3 /> @Model.quiz[i].option3 <br />
+        <input type="radio" class="ques@(i+1)" name="ques@(i+1)" value=4 /> @Model.quiz[i].option4 <br />
+        <input type="hidden" id="answer@(i+1)" value=@Model.quiz[i].answer />
+        <div id="answerDiv@(i+1)"></div>
+    </div>
+}
+<input type="submit" value="Submit" id="submitBtn" />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submitBtn").click(function () {
+                for(i=0;i< @Model.quiz.Count;i++){
+                    str='';
+                    if($('input[name="ques'+(i+1)+'"]:checked').val()== $("#answer"+(i+1)).val() ){
+                        str="Correct !!";
+                    }
+                    else{
+                        str= "Wrong !!";
+                    }
+                    str=str+ "<br /> Your Answer: Option"+$('input[name="ques'+(i+1)+'"]:checked').val()+
+                    "<br />Actual Answer: Option"+$("#answer"+(i+1)).val()+"<br />";
+                    if($('input[name="ques'+(i+1)+'"]:checked').val()== null){
+                        str="Please Select your answer"
+                    }
+                    $("#answerDiv"+(i+1)).html(str);
+                }
+            });
+         });
+    </script>
+}
+       
+     

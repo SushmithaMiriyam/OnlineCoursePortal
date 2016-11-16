@@ -9,6 +9,7 @@ namespace OnlineCoursePortal.Models
     public class AddedCourseView
     {
         public Course course { get; set; }
+        public ArrayList QuizSecNums { get; set; }
         public ArrayList LecturesInSection { get; set; }
         public ArrayList sectionNames { get; set; }
         public string LectureDesc { get; set; }

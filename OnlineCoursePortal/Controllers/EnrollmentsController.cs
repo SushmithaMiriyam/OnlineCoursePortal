@@ -116,10 +116,17 @@ namespace OnlineCoursePortal.Controllers
             //get lecture description from file "LectureDesc"+ LectureNum+".txt"
 
             var lecDesc = System.IO.File.ReadAllText(Server.MapPath(LecPath) + @"/LectureDesc"+LectureNum+".txt");
+
+            ArrayList quizSecs = new ArrayList((from q in db.Quiz
+                                                where q.CourseID == Cid
+                                                orderby q.sectionNum
+                                                select q.sectionNum).Distinct().ToList());
+
             EnrolledCourseView courseView = new EnrolledCourseView
             {
                 enrollment = enroll,
                 course = course,
+                QuizSecNums =quizSecs,
                 notes = notes,
                 reminders = reminders,
                 LectureVideoPath = LecVideo,
@@ -133,6 +140,50 @@ namespace OnlineCoursePortal.Controllers
             
             return View(courseView);
         }
+
+        public ActionResult QuizDetails(int Cid, int sectionNum)
+        {
+            var userId = User.Identity.GetUserId();
+            Enrollment enroll = db.Enrollments
+                .Where(i => i.StudentID == userId)
+                .Where(i => i.CourseID == Cid).Single();
+            Course course = db.Course.Find(Cid);
+            Instructor instructor = db.Instructors.Find(course.InstructorID);
+            ArrayList LecCount = new ArrayList();
+            ArrayList sectionNames = new ArrayList();
+            for (int i = 1; i <= course.TotalSections; i++)
+            {
+                string sPath = course.CoursePath + "/section" + i;
+                DirectoryInfo dInfo = new DirectoryInfo(Server.MapPath(sPath));
+                var str = dInfo.GetDirectories();
+                int totLectures = str.Count();
+                //get count of lectures in each section
+                LecCount.Add(totLectures);
+                var secName = System.IO.File.ReadAllText(Server.MapPath(sPath) + @"/SectionName.txt");
+                sectionNames.Add((string)secName);
+            }
+            List<Quiz> quiz = new List<Quiz>((from q in db.Quiz
+                                              where q.CourseID == Cid && q.sectionNum == sectionNum
+                                              select q).ToList());
+
+            ArrayList quizSecs = new ArrayList((from q in db.Quiz
+                                                where q.CourseID == Cid
+                                                orderby q.sectionNum
+                                                select q.sectionNum).Distinct().ToList());
+
+            EnrolledQuizView courseView = new EnrolledQuizView
+            {
+                enrollmentID = enroll.EnrollmentID,
+                course = course,
+                LecturesInSection = LecCount,
+                sectionNames = sectionNames,
+                quiz = quiz,
+                QuizSecNums = quizSecs
+            };
+
+            return View(courseView);
+        }
+         
         public FileResult downloadAddDoc(string Filepath)
         {
            
