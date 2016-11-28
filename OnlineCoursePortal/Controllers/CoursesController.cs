@@ -34,6 +34,69 @@ namespace OnlineCoursePortal.Controllers
             return View(course);
         }
 
+        [Authorize(Roles="Admin")]
+        public ActionResult Reports()
+        {
+            return View();
+        }
+
+        [Authorize(Roles ="Admin")]
+        public ActionResult AdminCourseReport()
+        {
+            CourseReport courseReport = new CourseReport
+            {
+                courseList = db.Course.ToList()
+
+            };
+            return View(courseReport);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Instructor")]
+        public ActionResult CourseReports(int courseID)
+        {
+            List<Enrollment> enrollment = db.Enrollments.Where(c => c.CourseID == courseID).ToList();
+            CourseReport courseReport = new CourseReport
+            {
+                selectedCourse = db.Course.Find(courseID),
+                NumOfStudents = enrollment.Count,
+                enrollments = enrollment
+
+            };
+
+            return View(courseReport);
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AdminStudentReport()
+        {
+            StudentReport studentReport = new StudentReport
+            {
+                studentList = db.Students.ToList()
+
+            };
+            return View(studentReport);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult StudentReports(string studentID)
+        {
+            List<Enrollment> enrollment = db.Enrollments.Where(c => c.StudentID == studentID).ToList();
+            StudentReport studentReport = new StudentReport
+            {
+                selectedstudent = db.Students.Find(studentID),
+                NumOfCourses = enrollment.Count,
+                enrollments = enrollment
+
+            };
+
+            return View(studentReport);
+        }
+
         // GET: Courses/Details/5
         public ActionResult Details(int Cid, int sectionNum, int LectureNum)
         {
@@ -151,6 +214,7 @@ namespace OnlineCoursePortal.Controllers
         [Authorize(Roles = "Instructor")]
         public ActionResult Create()
         {
+            ViewBag.error = TempData["error"];
             return View();
         }
 
@@ -161,6 +225,8 @@ namespace OnlineCoursePortal.Controllers
             ViewBag.sectionsTobeAdded = TempData["sectionsTobeAdded"];
             ViewBag.totSec = TempData["totSec"];
             TempData["totSec"] = ViewBag.totSec;
+            ViewBag.totLec = TempData["totLec"];
+            TempData["totLec"] = ViewBag.totLec;
             return View();
         }
 
@@ -181,12 +247,16 @@ namespace OnlineCoursePortal.Controllers
             ViewBag.sectionsTobeAdded = course.TotalSections;
             ViewBag.totSec = course.TotalSections;
             TempData["totSec"] = (int) course.TotalSections;
+            TempData["totLec"] = 0;
             course.TotalSections = 0;
+            course.TotalLectures = "0";
+            course.ProgressTracker = "";
             //ViewBag.sectionsTobeAdded = TotalSec;
             //TempData["totSec"] = TotalSec;
             course.InstructorID = user.Id;
             course.UploadedDate = DateTime.Today;
             course.CoursePath = coursePath;
+            course.ProgressTracker = "";
             //Course course = new Course()
             //{
             //    CourseName = CName,
@@ -202,7 +272,14 @@ namespace OnlineCoursePortal.Controllers
 
             if (ModelState.IsValid)
             {
+                int existingCourseName = db.Course.Where(c => c.CourseName == course.CourseName).ToList().Count;
+                if (existingCourseName != 0)
+                {
+                    TempData["error"]="The courseName already exists, please choose different course Name";
+                    return RedirectToAction("Create");
+                }
                 db.Course.Add(course);
+                
                 db.SaveChanges();
 
                 coursePath = coursePath + "/" + course.CourseID;
@@ -224,6 +301,7 @@ namespace OnlineCoursePortal.Controllers
         {
             Course course = TempData["course"] as Course;
             int totsec = section.totalSections;
+            string CourseProgressTracker = course.ProgressTracker;
             TempData["totSec"] = totsec;
             TempData["sectionsTobeAdded"] = section.sectionsTobeAdded;
             int sectionNumber = totsec - section.sectionsTobeAdded;
@@ -259,6 +337,7 @@ namespace OnlineCoursePortal.Controllers
                 db.Entry(course).State = EntityState.Modified;
                 db.SaveChanges();
                 i++;
+                CourseProgressTracker =CourseProgressTracker + "N";
             }
             else
             {
@@ -287,6 +366,7 @@ namespace OnlineCoursePortal.Controllers
                     outputFile.WriteLine(section.lectureDescription2);
                 }
                 i++;
+                CourseProgressTracker = CourseProgressTracker + "N";
             }
 
             if (section.lecturefile3 != null && section.lecturefile3.ContentLength > 0)
@@ -308,6 +388,7 @@ namespace OnlineCoursePortal.Controllers
                     outputFile.WriteLine(section.lectureDescription3);
                 }
                 i++;
+                CourseProgressTracker = CourseProgressTracker + "N";
             }
 
             if (section.lecturefile4 != null && section.lecturefile4.ContentLength > 0)
@@ -329,6 +410,7 @@ namespace OnlineCoursePortal.Controllers
                     outputFile.WriteLine(section.lectureDescription4);
                 }
                 i++;
+                CourseProgressTracker = CourseProgressTracker + "N";
             }
 
             if (section.lecturefile5 != null && section.lecturefile5.ContentLength > 0)
@@ -350,7 +432,14 @@ namespace OnlineCoursePortal.Controllers
                     outputFile.WriteLine(section.lectureDescription5);
                 }
                 i++;
+                CourseProgressTracker = CourseProgressTracker + "N";
             }
+            TempData["totLec"] = (int)TempData["totLec"] + i-1;
+            course.TotalLectures = Convert.ToString(TempData["totLec"]);
+            course.ProgressTracker = CourseProgressTracker;
+            //course.P
+            db.Entry(course).State = EntityState.Modified;
+            db.SaveChanges();
             if (submitBtn.CompareTo("Add Next Section") == 0)
             {
                 if (section.sectionsTobeAdded == 0)
@@ -381,17 +470,24 @@ namespace OnlineCoursePortal.Controllers
             ViewBag.sectionsTobeAdded = TempData["sectionsTobeAdded"];
             ViewBag.totSec = TempData["totSec"];
             TempData["totSec"] = ViewBag.totSec;
+            ViewBag.totLec = TempData["totLec"];
+            TempData["totLec"] = ViewBag.totLec;
             return View();
         }
 
         [HttpPost]
         [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
-        public ActionResult AddQuiz(FormCollection form, string NumOfQuestions, string sectionsTobeAdded, string totalSections)
+        public ActionResult AddQuiz(FormCollection form, string NumOfQuestions,
+                            string sectionsTobeAdded, string totalSections,string totalLec)
         {
             Course course = TempData["course"] as Course;
             TempData["totSec"] = Convert.ToInt32(totalSections);
             TempData["sectionsTobeAdded"] = Convert.ToInt32(sectionsTobeAdded);
+            if (totalLec.Equals("")) {
+                TempData["totLec"] = 0; }
+            else{
+                TempData["totLec"] = Convert.ToInt32(totalLec); }
 
             for (int i = 1; i <= Convert.ToInt32(NumOfQuestions); i++)
             {
@@ -438,7 +534,7 @@ namespace OnlineCoursePortal.Controllers
 
         public ActionResult CourseUploadSucess()
         {
-
+            
             return View();
         }
         // GET: Courses/Edit/5

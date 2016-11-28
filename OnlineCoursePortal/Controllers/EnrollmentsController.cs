@@ -13,12 +13,12 @@ using System.IO;
 
 namespace OnlineCoursePortal.Controllers
 {
-    [Authorize(Roles ="Student")]
     public class EnrollmentsController : Controller
     {
         private OnlineCoursePortalContext db = new OnlineCoursePortalContext();
 
         // GET: Enrollments
+        [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
@@ -32,7 +32,70 @@ namespace OnlineCoursePortal.Controllers
             return View(course);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EnrollStudents()
+        {
+            AdminView adminView = new AdminView
+            {
+                studentList = db.Students.ToList(),
+                courseList = db.Course.Where(i => i.TotalSections > 0).ToList()
+
+            };
+            return (View(adminView));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult StudentsEnrollmentStatus(string CourseID, string[] StudentIDList)
+        {
+            Course course = db.Course.Find(Convert.ToInt32(CourseID));
+            // Course course= adminView.courseList[0];
+            EnrollmentStatus Estatus = new EnrollmentStatus()
+            {
+                courseName=course.CourseName,
+                studentEmail = new List<string>(),
+                status = new List<string>()
+                
+            };
+            //[Bind(Include = "EnrollmentID,CourseID,StudentID,EnrollmentDate,Progress,pointsEarned")] Enrollment enrollment)
+            foreach(string sid in StudentIDList)//adminView.studentList)
+            {
+                
+                Enrollment courseEnrollment = new Enrollment()
+                {
+                    EnrollmentDate = DateTime.Today,
+                    StudentID = sid,
+                    CourseID = course.CourseID,
+                    pointsEarned = 0,
+                    Progress = 0,
+                    ProgressTracker= ""
+                };
+                Student s = db.Students.Find(sid);
+                Estatus.studentEmail.Add(s.Email);
+                
+                var check = (from e in db.Enrollments
+                             where e.CourseID == course.CourseID && e.StudentID == sid
+                             select e).ToList();
+                if (check.Count == 0)
+                {
+                    db.Enrollments.Add(courseEnrollment);
+                    db.SaveChanges();
+                    Estatus.status.Add("Sucess");
+                }
+                else
+                {
+                    Estatus.status.Add("Already Enrolled");
+                }
+            }
+            return View(Estatus);
+        }
+
+
+
         // GET: Enrollments/Details/5
+        [Authorize(Roles = "Student")]
         public ActionResult Details(int Cid, int sectionNum, int LectureNum)
         {
             string fromEnroll = (string)TempData["messageEnrollSucess"];
@@ -141,6 +204,9 @@ namespace OnlineCoursePortal.Controllers
             return View(courseView);
         }
 
+
+        
+        [Authorize(Roles = "Student")]
         public ActionResult QuizDetails(int Cid, int sectionNum)
         {
             var userId = User.Identity.GetUserId();
@@ -183,7 +249,9 @@ namespace OnlineCoursePortal.Controllers
 
             return View(courseView);
         }
-         
+
+        
+        [Authorize(Roles = "Student")]
         public FileResult downloadAddDoc(string Filepath)
         {
            
@@ -220,6 +288,7 @@ namespace OnlineCoursePortal.Controllers
         }
 
         // GET: Enrollments/Create
+        [Authorize(Roles = "Student")]
         public ActionResult EnrollToCourse()
         {
             ViewBag.CourseID = new SelectList(db.Course, "CourseID", "CourseName");

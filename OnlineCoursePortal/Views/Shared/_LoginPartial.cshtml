@@ -23,9 +23,14 @@
             <li>@Html.ActionLink("My Courses", "Index", "Courses")</li>
             <li>@Html.ActionLink("Add Course", "Create","Courses")</li>
         }
-        else
+        else if (User.IsInRole("Student"))
         {
             <li>@Html.ActionLink("Enrolled Courses","Index", "Enrollments")</li>
+        }
+        else if (User.IsInRole("Admin"))
+        {
+            <li>@Html.ActionLink("Enroll Students", "EnrollStudents", "Enrollments")</li>
+            <li>@Html.ActionLink("Reports", "Reports", "Courses")</li>
         }
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>

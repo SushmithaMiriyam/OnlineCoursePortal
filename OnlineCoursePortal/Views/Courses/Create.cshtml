@@ -14,6 +14,7 @@
         <h4>Course Details</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @ViewBag.error <br/>
         <div class="form-group">
             <label class="col-md-2 control-label">Course Name</label>
             <div class="col-md-10">

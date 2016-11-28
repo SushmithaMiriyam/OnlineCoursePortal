@@ -24,6 +24,7 @@ namespace OnlineCoursePortal.Models
 
         public DateTime EnrollmentDate { get; set; }
         public float Progress { get; set; }
+        public string ProgressTracker { get; set; }
         public float pointsEarned { get; set; }
 
         public virtual Course Course { get; set; }

@@ -21,6 +21,7 @@ namespace OnlineCoursePortal.Models
         public DbSet<Notes> Notes { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<Quiz> Quiz { get; set; }
+        public DbSet<Admin> Admin { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

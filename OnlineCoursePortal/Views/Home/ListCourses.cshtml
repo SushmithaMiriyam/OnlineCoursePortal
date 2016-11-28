@@ -10,7 +10,7 @@
     <hr />
     <div style="padding:20px">
         
-        @if (User.IsInRole("Student"))
+        <!-- @if (User.IsInRole("Student"))
         {
             using (Html.BeginForm("EnrollToCourse", "Enrollments", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
@@ -19,9 +19,11 @@
             @Html.Hidden("CourseID", item.CourseID)
             <input type="submit" value="Enroll" class="btn" />
             }
-        }
-        else
-        {  <h3 style="display:inline-block">@Html.DisplayFor(modelItem => item.CourseName)</h3><br/>}
+        }-->
+        <!--else
+        {-->
+        <h3 style="display:inline-block">@Html.DisplayFor(modelItem => item.CourseName)</h3><br/>
+        <!--}-->
         Summary: @Html.DisplayFor(modelItem => item.CourseSummary)<br />
         Category: @Html.DisplayFor(modelItem => item.Category) | Total Sections: @Html.DisplayFor(modelItem => item.TotalSections) |
         Total Points: @Html.DisplayFor(modelItem => item.Totalpoints) | Uploaded Date: @Html.DisplayFor(modelItem => item.UploadedDate) <br />

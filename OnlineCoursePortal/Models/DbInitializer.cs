@@ -20,6 +20,10 @@ namespace OnlineCoursePortal.Models
             {
                 Name = "Instructor"
             });
+            db.Roles.Add(new IdentityRole()
+            {
+                Name = "Admin"
+            });
 
             //var Students = new List<Student> { };
             //var Instructors = new List<Instructor> { };

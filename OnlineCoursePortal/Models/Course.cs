@@ -15,6 +15,8 @@ namespace OnlineCoursePortal.Models
         public int CourseID { get; set; }
 
         [Required]
+        [StringLength(450)]
+        [Index(IsUnique = true)]
         public string CourseName { get; set; }
 
         [ForeignKey("Instructor")]
@@ -41,6 +43,8 @@ namespace OnlineCoursePortal.Models
         public int TotalSections { get; set; }
 
         public string TotalLectures { get; set; }
+
+        public string ProgressTracker { get; set; }
 
         public virtual Instructor Instructor { get; set; }
 

@@ -1,0 +1,26 @@
+﻿@model OnlineCoursePortal.Models.StudentReport
+
+@{
+    ViewBag.Title = "StudentReports";
+}
+
+<h2>Admin Student Report</h2>
+<br />
+@using (Html.BeginForm("StudentReports", "Courses", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        <label class="col-md-2 control-label">Student Email ID : </label>
+        <div class="col-md-10">
+            @Html.DropDownList("studentID",
+                            new SelectList(
+                                Model.studentList,
+                           "StudentID", "Email"),
+                           new { onchange = "getAlldata()" })
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn" value="Get Report" />
+    </div>
+}

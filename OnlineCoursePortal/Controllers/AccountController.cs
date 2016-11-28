@@ -168,6 +168,7 @@ namespace OnlineCoursePortal.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+
                     if (model.Role.Equals("Student"))
                     {
                         if (model.InterestedCategory== null) {
@@ -191,7 +192,7 @@ namespace OnlineCoursePortal.Controllers
                         db.SaveChanges();
                         
                     }
-                    else
+                    else if(model.Role.Equals("Instructor"))
                     {
                         Instructor instructor = new Instructor
                         {
@@ -207,9 +208,24 @@ namespace OnlineCoursePortal.Controllers
                         db.Instructors.Add(instructor);
                         db.SaveChanges();
                     }
+                    else if (model.Role.Equals("Admin"))
+                    {
+                        Admin admin = new Admin
+                        {
+                            AdminID = user.Id,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            Email = model.Email,
+                            Gender = model.Gender,
+                            PhoneNumber = model.PhoneNumber,
+                            DateOfBirth = model.DateOfBirth
+                        };
+                        db.Admin.Add(admin);
+                        db.SaveChanges();
+                    }
                     if (!roleManager.RoleExists(model.Role))
                     {
-                        
+
                         var role = new IdentityRole();
                         role.Name = model.Role;
                         roleManager.Create(role);

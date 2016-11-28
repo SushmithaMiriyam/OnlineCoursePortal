@@ -17,7 +17,12 @@
                 @Html.DisplayFor(model => model.course.CourseName)<br />
             </a>
         </li>
-        @{ int k = 0, secNum = (int)Model.QuizSecNums[0];}
+        @{ int k = 0, secNum = 0;
+            if (Model.QuizSecNums.Count > 0)
+            {
+                secNum = (int)Model.QuizSecNums[0];
+            }
+        }
         @for (int i = 0; i < Model.course.TotalSections; i++)
         {
             <li class="secName"><a href="/Courses/Details?Cid=@Model.course.CourseID&sectionNum=@(i+1)&LectureNum=1"> @Model.sectionNames[i]</a></li>
@@ -36,7 +41,17 @@
             }
         }
 
-    </ul>
+    </ul><br />
+    @using (Html.BeginForm("CourseReports", "Courses", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="courseID" value="@Model.course.CourseID" />
+        <div class="secName">
+            <div class="col-md-10">
+                <input type="submit" name="report" value="View Report" />
+            </div>
+        </div>
+    }
 }
 <br />
 <div class="col-md-12" controls>

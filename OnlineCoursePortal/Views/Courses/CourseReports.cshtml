@@ -1,0 +1,37 @@
+﻿@model OnlineCoursePortal.Models.CourseReport
+
+@using OnlineCoursePortal.Models
+@{
+    ViewBag.Title = "CourseReports";
+}
+
+<h2>Course Reports</h2>
+
+Total Number of students enrolled into the course @Model.selectedCourse.CourseName: @Model.NumOfStudents
+<br />
+List of Student and their details: <br />
+<table class="table">
+    <thead>
+        <tr>
+            <td> Student ID </td>
+            <td> First Name </td>
+            <td> Last Name  </td>
+            <td> Email ID   </td>
+            <td> Enrollment Date(MM/DD/YYYY)</td>
+            <!--<td> Progress</td>-->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Enrollment enrollment in Model.enrollments)
+        {
+            <tr>
+                <td> @enrollment.StudentID </td>
+                <td> @enrollment.Student.FirstName </td>
+                <td> @enrollment.Student.LastName </td>
+                <td> @enrollment.Student.Email </td>
+                <td> @enrollment.EnrollmentDate.ToShortDateString() </td>
+                <!-- <td> @enrollment.Progress </td>-->
+            </tr>
+        }
+    </tbody>
+</table>

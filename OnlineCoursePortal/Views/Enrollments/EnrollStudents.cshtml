@@ -1,0 +1,48 @@
+﻿@model OnlineCoursePortal.Models.AdminView
+@{
+    ViewBag.Title = "EnrollStudents";
+}
+
+<h2>EnrollStudents</h2>
+<br />
+@using (Html.BeginForm("StudentsEnrollmentStatus", "Enrollments", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label >Course Name :</label>
+        @Html.DropDownList("CourseID",
+                            new SelectList(
+                                Model.courseList,
+                           "CourseID", "CourseName"),
+                           new { onchange = "getAlldata()" })
+    </div>
+
+    <div class="form-group">
+        <label>Student List </label>
+        @Html.DropDownList("StudentIDList",
+                            new MultiSelectList(
+                                Model.studentList,
+                            "StudentID", "Email"),
+                            new
+                            {
+                                multiple = "multiple",
+                                @class = "multiselect"
+                            })
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Add Students to course" class="btn" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(function () {
+            $(".multiselect").multiselect();
+        });
+    </script>
+}

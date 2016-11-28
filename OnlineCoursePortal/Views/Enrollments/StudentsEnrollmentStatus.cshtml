@@ -1,0 +1,28 @@
+﻿@model OnlineCoursePortal.Models.EnrollmentStatus
+@using OnlineCoursePortal.Models
+
+@{
+    ViewBag.Title = "StudentsEnrollmentStatus";
+}
+
+<h2>StudentsEnrollmentStatus</h2>
+
+Course Name: @Model.courseName <br />
+
+<table border="1" class="table">
+    <thead>
+        <tr>
+            <td> Student Email</td>
+            <td> Status</td>
+        </tr>
+    </thead>
+    <tbody>
+        @for(int i=0; i< Model.studentEmail.Count;i++)
+        {
+            <tr>
+                <td> @Model.studentEmail[i] </td>
+                <td> @Model.status[i]</td>
+            </tr>
+        }
+    </tbody>
+</table>

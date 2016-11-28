@@ -32,7 +32,17 @@
             }
         }
 
-    </ul>
+    </ul><br />
+    @using (Html.BeginForm("CourseReports", "Courses", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="courseID" value="@Model.course.CourseID" />
+            <div class="secName">
+                <div class="col-md-10">
+                    <input type="submit" name="report" value="View Report" />
+                </div>
+            </div>
+    }
 }
 <br />
 <h2> Quiz </h2>
